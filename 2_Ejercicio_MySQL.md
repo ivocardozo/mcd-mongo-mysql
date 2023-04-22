@@ -125,10 +125,21 @@ Respuesta:
 ```sql
 -- Su respuesta aqui:
 
-SELECT a.actor_id, a.first_name, a.last_name, COUNT(*) AS comedy_film_count FROM actor
-a INNER JOIN film_actor fa ON a.actor_id = fa.actor_id WHERE fa.film_id IN (   SELECT film_id
-  FROM film_category fc   WHERE fc.category_id = (     SELECT category_id     FROM category
-  WHERE name = 'Comedy'   ) ) GROUP BY a.actor_id ORDER BY comedy_film_count DESC LIMIT 10;
+SELECT a.actor_id,
+       a.first_name,
+       a.last_name,
+       Count(*) AS comedy_film_count
+FROM   actor a
+       INNER JOIN film_actor fa
+               ON a.actor_id = fa.actor_id
+WHERE  fa.film_id IN (SELECT film_id
+                      FROM   film_category fc
+                      WHERE  fc.category_id = (SELECT category_id
+                                               FROM   category
+                                               WHERE  name = 'Comedy'))
+GROUP  BY a.actor_id
+ORDER  BY comedy_film_count DESC
+LIMIT  10; 
 
 ```
 
